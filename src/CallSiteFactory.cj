@@ -250,7 +250,7 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 		parameters: Array<ParameterInfo>,
 		throwIfCallSiteNotFound: Bool
 	): ?Array<ServiceCallSite> {
-		var parameterCallSites = Array<?ServiceCallSite>(parameters.size, repeat: Option<ServiceCallSite>.None)
+		var parameterCallSites = ArrayList<ServiceCallSite>()
 
 		for (index in 0..parameters.size) {
 			var callSite: ?ServiceCallSite = None
@@ -293,10 +293,10 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 				return None
 			}
 
-			parameterCallSites[index] = callSite
+			parameterCallSites.append(callSite.getOrThrow())
 		}
 
-		throw NotImplementedException()
+		return parameterCallSites.toArray()
 	}
 
 	public func add(serviceIdentifier: ServiceIdentifier, serviceCallSite: ServiceCallSite) {

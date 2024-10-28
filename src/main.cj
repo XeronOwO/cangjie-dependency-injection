@@ -3,36 +3,51 @@ package dependency_inject
 import std.collection.*
 import std.reflect.*
 
-interface IFoo <: ToString {
+interface I1 <: ToString {
 }
 
-class Foo <: Object & IFoo {
-	public override func toString(): String {
-		"Foo"
+class C1 <: I1 {
+	public func toString(): String {
+		return "C1"
 	}
 }
 
-func get(): ?Any {
-	let fooType = (TypeInfo.of<Foo>() as ClassTypeInfo).getOrThrow() // ok
-	let fooConstructor = fooType.constructors.iterator().first().getOrThrow() // ok
-	let objInstance = (fooConstructor.apply([]) as Object).getOrThrow() // ok
-	return objInstance
+interface I2 <: ToString {
+}
+
+class C2 <: I2 {
+	private let _i1: I1
+	public init(i1 : I1) {
+		_i1 = i1
+	}
+	
+	public func toString(): String {
+		return "C2(${_i1})"
+	}
+}
+
+interface I3 <: ToString {
+}
+
+class C3 <: I3 {
+	private let _i1: I1
+	private let _i2: I2
+	public init(i1 : I1, i2 : I2) {
+		_i1 = i1
+		_i2 = i2
+	}
+	
+	public func toString(): String {
+		return "C3(${_i1}, ${_i2})"
+	}
 }
 
 main(): Unit {
-	let objInstance = (get().getOrThrow() as Object).getOrThrow()
-	// let fooInstance = (objInstance as Foo).getOrThrow() // ok
-	// println(fooInstance) // ok
-	let ifooInstance = (objInstance as IFoo).getOrThrow() // ok
-	println(ifooInstance) // err: itable is nullptr
-
 	let services = ServiceCollection()
-	ServiceCollection.addTransient2<IFoo, Foo>(services)
+	ServiceCollection.addTransient2<I1, C1>(services)
+	ServiceCollection.addTransient2<I2, C2>(services)
+	ServiceCollection.addTransient2<I3, C3>(services)
 	let provider = ServiceProvider(services, ServiceProviderOptions())
-	let ifoo = IServiceProvider.getService1<IFoo>(provider)
-	if (ifoo.isNone()) {
-		println("ifoo is None")
-	} else {
-		println(ifoo.getOrThrow().toString())
-	}
+	let i3 = IServiceProvider.getRequiredService1<I3>(provider)
+	println(i3.toString())
 }

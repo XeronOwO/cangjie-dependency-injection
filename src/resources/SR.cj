@@ -117,6 +117,10 @@ public class SR {
 		get() { "No constructor for type '{0}' can be instantiated using services from the service container and default values." }
 	}
 
+	public static prop NoServiceRegisteredForType: String {
+		get() { "No service for type '{0}' has been registered." }
+	}
+
 	public static func format(format: String, args: Array<ToString>): String {
 		return formatParamterIndex(format, args)
 	}

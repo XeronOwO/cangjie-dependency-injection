@@ -36,12 +36,13 @@ internal class CallSiteRuntimeResolver <: CallSiteVisitor<RuntimeResolverContext
 		} else {
 			parameterValues = Array(constructorCallSite.parameterCallSites.size, { _ => None })
 			for (index in 0..constructorCallSite.parameterCallSites.size) {
-				parameterValues[index] = visitCallSite(constructorCallSite.parameterCallSites[index], context)
+				parameterValues[index] = visitCallSite(constructorCallSite.parameterCallSites[index], context).getOrThrow()
 			}
 		}
 
 		try {
-			let objectInstance = (constructorCallSite.constructorInfo.apply(parameterValues) as Object).getOrThrow()
+			let instance = constructorCallSite.constructorInfo.apply(parameterValues)
+			let objectInstance = (instance as Object).getOrThrow()
 			return objectInstance
 		} catch (ex: Exception) {
 			throw ex
