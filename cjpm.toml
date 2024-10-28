@@ -1,0 +1,14 @@
+[dependencies]
+
+[package]
+  cjc-version = "0.55.3"
+  compile-option = ""
+  description = "Dependency injection implementation of Cangjie. Inspired by Microsoft.Extensions.DependencyInjection."
+  link-option = ""
+  name = "dependency_inject"
+  output-type = "executable"
+  override-compile-option = ""
+  src-dir = ""
+  target-dir = ""
+  version = "1.0.0"
+  package-configuration = {}
