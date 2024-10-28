@@ -215,7 +215,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		_serviceAccessors[ServiceIdentifier(callSite.key, callSite.serviceType)] = serviceAccessor
 	}
 
-	internal func createScope(): IServiceScope {
+	public func createScope(): IServiceScope {
 		if (_closed) {
 			ThrowHelper.throwResourceClosedException()
 		}

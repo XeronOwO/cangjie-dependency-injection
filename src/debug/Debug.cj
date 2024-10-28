@@ -4,6 +4,7 @@ import logger.*
 import std.console.*
 
 public class Debug {
+	@When[debug]
 	private static let _logger = SimpleLogger(Console.stdOut)
 
 	@When[debug]
@@ -12,7 +13,7 @@ public class Debug {
 	}
 
 	@When[!debug]
-	public static func assert(condition: Bool) {}
+	public static func assert(_: Bool) {}
 
 	@When[debug]
 	public static func assert(condition: Bool, message: ?String) {
@@ -22,7 +23,7 @@ public class Debug {
 	}
 
 	@When[!debug]
-	public static func assert(condition: Bool, message: ?String) {}
+	public static func assert(_: Bool, _: ?String) {}
 
 	@When[debug]
 	public static func fail(message: ?String) {
@@ -31,5 +32,5 @@ public class Debug {
 	}
 
 	@When[!debug]
-	public static func fail(message: ?String) {}
+	public static func fail(_: ?String) {}
 }

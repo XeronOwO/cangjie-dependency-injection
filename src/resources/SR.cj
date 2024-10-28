@@ -121,6 +121,10 @@ public class SR {
 		get() { "No service for type '{0}' has been registered." }
 	}
 
+	public static prop KeyedServicesNotSupported: String {
+		get() { "This service provider doesn't support keyed services." }
+	}
+
 	public static func format(format: String, args: Array<ToString>): String {
 		return formatParamterIndex(format, args)
 	}
