@@ -3,6 +3,14 @@ package dependency_inject
 import std.collection.*
 
 /*
+	@issue
+	[Feature Request] Add `List<T>` into `std`
+	https://gitcode.com/Cangjie/UsersForum/issues/1170
+
+	Dev: feature on the way.
+*/
+
+/*
 	A List is an ordered collection of objects.  The exact ordering
 	is up to the implementation of the list, ranging from a sorted
 	order to insertion order.
