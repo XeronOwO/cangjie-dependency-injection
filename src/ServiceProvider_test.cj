@@ -85,9 +85,7 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq(class1_1, class1_2))
 
-		let interface1ObjectOption = provider.getService(interface1Type)
-		@Expect(interface1ObjectOption.isNone())
-
+		@Expect(provider.getService(interface1Type).isNone())
 		@ExpectThrows[InvalidOperationException](provider.getRequiredService(interface1Type))
 	}
 
@@ -114,9 +112,7 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq((interface1_1 as Object).getOrThrow(), (interface1_2 as Object).getOrThrow()))
 
-		let class1ObjectOption = provider.getService(class1Type)
-		@Expect(class1ObjectOption.isNone())
-
+		@Expect(provider.getService(class1Type).isNone())
 		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
 	}
 
@@ -149,13 +145,9 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq((interface3_1 as Object).getOrThrow(), (interface3_2 as Object).getOrThrow()))
 
-		let class1ObjectOption = provider.getService(class1Type)
-		@Expect(class1ObjectOption.isNone())
-		let class2ObjectOption = provider.getService(class2Type)
-		@Expect(class2ObjectOption.isNone())
-		let class3ObjectOption = provider.getService(class3Type)
-		@Expect(class3ObjectOption.isNone())
-
+		@Expect(provider.getService(class1Type).isNone())
+		@Expect(provider.getService(class2Type).isNone())
+		@Expect(provider.getService(class3Type).isNone())
 		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
 		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class2Type))
 		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class3Type))
@@ -177,9 +169,7 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq(class1_1, class1_2))
 
-		let interface1Option = IServiceProvider.getService1<Interface1>(provider)
-		@Expect(interface1Option.isNone())
-
+		@Expect(IServiceProvider.getService1<Interface1>(provider).isNone())
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Interface1>(provider))
 	}
 
@@ -199,9 +189,7 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq((interface1_1 as Object).getOrThrow(), (interface1_2 as Object).getOrThrow()))
 
-		let class1Option = IServiceProvider.getService1<Class1>(provider)
-		@Expect(class1Option.isNone())
-
+		@Expect(IServiceProvider.getService1<Class1>(provider).isNone())
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class1>(provider))
 	}
 
@@ -223,13 +211,9 @@ private class ServiceProviderTest {
 
 		@Expect(!refEq((interface3_1 as Object).getOrThrow(), (interface3_2 as Object).getOrThrow()))
 
-		let class1Option = IServiceProvider.getService1<Class1>(provider)
-		@Expect(class1Option.isNone())
-		let class2Option = IServiceProvider.getService1<Class2>(provider)
-		@Expect(class2Option.isNone())
-		let class3Option = IServiceProvider.getService1<Class3>(provider)
-		@Expect(class3Option.isNone())
-
+		@Expect(IServiceProvider.getService1<Class1>(provider).isNone())
+		@Expect(IServiceProvider.getService1<Class2>(provider).isNone())
+		@Expect(IServiceProvider.getService1<Class3>(provider).isNone())
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class1>(provider))
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class2>(provider))
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class3>(provider))
