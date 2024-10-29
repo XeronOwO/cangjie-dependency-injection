@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 internal enum CallSiteResultCacheLocation {
 	| Root

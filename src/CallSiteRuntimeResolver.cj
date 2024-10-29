@@ -1,6 +1,6 @@
-package dependency_inject
+package dependency_injection
 
-import dependency_inject.exceptions.*
+import dependency_injection.exceptions.*
 import std.collection.*
 import std.sync.*
 

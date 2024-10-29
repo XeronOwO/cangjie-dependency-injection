@@ -1,7 +1,7 @@
-package dependency_inject.exceptions
+package dependency_injection.exceptions
 
-import dependency_inject.resources.*
-import dependency_inject.runtime.*
+import dependency_injection.resources.*
+import dependency_injection.runtime.*
 
 public open class ArgumentOutOfRangeException <: ArgumentException {
 	private let _actualValue: ?ToString

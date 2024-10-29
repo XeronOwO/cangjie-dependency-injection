@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 /*
 	Creates instances of IServiceScope, which is used to create

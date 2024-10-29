@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 internal class RuntimeServiceProviderEngine <: ServiceProviderEngine {
 	private static let _instance = RuntimeServiceProviderEngine()

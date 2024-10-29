@@ -1,7 +1,7 @@
-package dependency_inject
+package dependency_injection
 
-import dependency_inject.exceptions.*
-import dependency_inject.resources.*
+import dependency_injection.exceptions.*
+import dependency_injection.resources.*
 import std.collection.*
 import std.reflect.*
 import std.sync.*

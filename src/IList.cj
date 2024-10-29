@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 import std.collection.*
 

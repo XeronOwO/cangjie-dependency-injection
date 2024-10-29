@@ -1,6 +1,6 @@
-package dependency_inject
+package dependency_injection
 
-import dependency_inject.resources.*
+import dependency_injection.resources.*
 import std.core.*
 import std.reflect.*
 

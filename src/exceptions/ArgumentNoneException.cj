@@ -1,6 +1,6 @@
-package dependency_inject.exceptions
+package dependency_injection.exceptions
 
-import dependency_inject.resources.*
+import dependency_injection.resources.*
 
 /*
 	The exception that is thrown when a none reference is passed to a method that does not accept it as a valid argument.

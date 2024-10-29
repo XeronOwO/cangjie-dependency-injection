@@ -5,7 +5,7 @@
   compile-option = ""
   description = "Dependency injection implementation of Cangjie. Inspired by Microsoft.Extensions.DependencyInjection."
   link-option = ""
-  name = "dependency_inject"
+  name = "dependency_injection"
   output-type = "dynamic"
   override-compile-option = ""
   src-dir = ""

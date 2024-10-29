@@ -1,4 +1,4 @@
-package dependency_inject.resources
+package dependency_injection.resources
 
 import std.convert.*
 import std.reflect.*

@@ -15,7 +15,7 @@ Dependency injection module for Cangjie programming language, inspired by  [Micr
 ```cangjie
 package app
 
-import dependency_inject.*
+import dependency_injection.*
 import std.collection.*
 import std.reflect.*
 import std.unittest.*

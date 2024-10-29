@@ -1,9 +1,9 @@
-package dependency_inject
+package dependency_injection
 
-import dependency_inject.debug.*
-import dependency_inject.exceptions.*
-import dependency_inject.resources.*
-import dependency_inject.runtime.*
+import dependency_injection.debug.*
+import dependency_injection.exceptions.*
+import dependency_injection.resources.*
+import dependency_injection.runtime.*
 import std.collection.*
 import std.collection.concurrent.*
 import std.reflect.*

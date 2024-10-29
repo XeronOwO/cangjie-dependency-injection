@@ -1,4 +1,4 @@
-package dependency_inject.runtime
+package dependency_injection.runtime
 
 public class Environment {
 	@When[os == "Windows"]

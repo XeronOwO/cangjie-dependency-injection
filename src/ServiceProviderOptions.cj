@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 /*
 	Options for configuring various behaviors of the default IServiceProvider implementation.

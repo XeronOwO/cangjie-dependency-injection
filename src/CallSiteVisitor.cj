@@ -1,4 +1,4 @@
-package dependency_inject
+package dependency_injection
 
 internal abstract class CallSiteVisitor<TArgument, TResult> {
 	protected init() {

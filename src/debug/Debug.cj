@@ -1,4 +1,4 @@
-package dependency_inject.debug
+package dependency_injection.debug
 
 import logger.*
 import std.console.*

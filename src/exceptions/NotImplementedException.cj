@@ -1,6 +1,6 @@
-package dependency_inject.exceptions
+package dependency_injection.exceptions
 
-import dependency_inject.resources.*
+import dependency_injection.resources.*
 
 public class NotImplementedException <: Exception {
 	public init() {
