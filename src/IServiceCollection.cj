@@ -813,4 +813,41 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	): IServiceCollection {
 		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, (implementationInstance as Object).getOrThrow())
 	}
+
+	/*
+	Creates a ServiceProvider containing services from the provided IServiceCollection.
+
+	services: The IServiceCollection containing service descriptors.
+
+	returns: The ServiceProvider.
+	*/
+	func buildServiceProvider(): ServiceProvider {
+		buildServiceProvider(ServiceProviderOptions.default)
+	}
+
+	/*
+	Creates a ServiceProvider containing services from the provided IServiceCollection
+	optionally enabling scope validation.
+
+	validatesScopes: true to perform check verifying that scoped services never gets resolved from root provider; otherwise false.
+
+	returns: The ServiceProvider.
+	*/
+	func buildServiceProvider(validateScopes: Bool): ServiceProvider {
+		let options = ServiceProviderOptions()
+		options.validateScopes = validateScopes
+		buildServiceProvider(options)
+	}
+
+	/*
+	Creates a ServiceProvider containing services from the provided IServiceCollection
+	optionally enabling scope validation.
+
+	options: Configures various service provider behaviors.
+
+	returns: The ServiceProvider.
+	*/
+	func buildServiceProvider(options: ServiceProviderOptions): ServiceProvider {
+		return ServiceProvider(this, options)
+	}
 }

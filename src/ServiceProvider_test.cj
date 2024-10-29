@@ -66,7 +66,7 @@ private class ServiceProviderTest {
 
 		let services = ServiceCollection()
 		services.addTransient(class1Type)
-		let provider = ServiceProvider(services, ServiceProviderOptions())
+		let provider = services.buildServiceProvider()
 		
 		let objectOption_1 = provider.getService(class1Type)
 		@Expect(objectOption_1.isSome())
@@ -92,7 +92,7 @@ private class ServiceProviderTest {
 	func transientUnrelatedTNoInject() {
 		let services = ServiceCollection()
 		IServiceCollection.addTransient1<Class1>(services)
-		let provider = ServiceProvider(services, ServiceProviderOptions())
+		let provider = services.buildServiceProvider()
 		
 		let class1Option_1 = IServiceProvider.getService1<Class1>(provider)
 		@Expect(class1Option_1.isSome())
