@@ -52,14 +52,15 @@ private class ServiceProviderTest {
 	- Unrelated: Registered with service type only.
 	- Related:   Registered with service type and implementation type.
 
-	- Object: Returns the service type as Object.
-	- T:      Returns the service type as T.
+	- Object:    Returns the service type as Object.
+	- T:         Returns the service type as T.
 
-	- NoInject: No constructor injection.
-	- Inject:   Constructor injection.
+	- NoInject:  No constructor injection.
+	- Inject:    Constructor injection.
 
-	- <None>: No key.
-	- Keyed:  With key.
+	- Keyed:     With service key.
+
+	- Factory:   With factory method.
 	*/
 
 	@TestCase
@@ -217,5 +218,132 @@ private class ServiceProviderTest {
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class1>(provider))
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class2>(provider))
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class3>(provider))
+	}
+
+	@TestCase
+	func scopeUnrelatedObjectNoInject() {
+		let interface1Type = TypeInfo.of<Interface1>()
+		let class1Type = TypeInfo.of<Class1>()
+
+		let services = ServiceCollection()
+		services.addScoped(class1Type)
+		let provider = services.buildServiceProvider()
+		let scopeFactory = IServiceProvider.getRequiredService1<IServiceScopeFactory>(provider)
+		let scope1 = scopeFactory.createScope()
+		let scope2 = scopeFactory.createScope()
+		
+		let objectOption_1 = scope1.serviceProvider.getService(class1Type)
+		@Expect(objectOption_1.isSome())
+		let class1Option_1 = objectOption_1.getOrThrow() as Class1
+		@Expect(class1Option_1.isSome())
+		let class1_1 = class1Option_1.getOrThrow()
+		@Expect(class1_1.toString() == "Class1")
+		
+		let class1Option_2 = scope1.serviceProvider.getRequiredService(class1Type) as Class1
+		@Expect(class1Option_2.isSome())
+		let class1_2 = class1Option_2.getOrThrow()
+		@Expect(class1_2.toString() == "Class1")
+		
+		let class1Option_3 = scope2.serviceProvider.getRequiredService(class1Type) as Class1
+		@Expect(class1Option_3.isSome())
+		let class1_3 = class1Option_3.getOrThrow()
+		@Expect(class1_3.toString() == "Class1")
+
+		@Expect(refEq(class1_1, class1_2))
+		@Expect(!refEq(class1_2, class1_3))
+
+		scope1.close()
+		scope2.close()
+
+		@Expect(provider.getService(interface1Type).isNone())
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(interface1Type))
+	}
+
+	@TestCase
+	func scopeRelatedObjectNoInject() {
+		let interface1Type = TypeInfo.of<Interface1>()
+		let class1Type = TypeInfo.of<Class1>()
+
+		let services = ServiceCollection()
+		services.addScoped(interface1Type, class1Type)
+		let provider = services.buildServiceProvider()
+		let scopeFactory = IServiceProvider.getRequiredService1<IServiceScopeFactory>(provider)
+		let scope1 = scopeFactory.createScope()
+		let scope2 = scopeFactory.createScope()
+		
+		let objectOption_1 = scope1.serviceProvider.getService(interface1Type)
+		@Expect(objectOption_1.isSome())
+		let interface1Option_1 = objectOption_1.getOrThrow() as Interface1
+		@Expect(interface1Option_1.isSome())
+		let interface1_1 = interface1Option_1.getOrThrow()
+		@Expect(interface1_1.toString() == "Class1")
+		
+		let interface1Option_2 = scope1.serviceProvider.getRequiredService(interface1Type) as Interface1
+		@Expect(interface1Option_2.isSome())
+		let interface1_2 = interface1Option_2.getOrThrow()
+		@Expect(interface1_2.toString() == "Class1")
+		
+		let interface1Option_3 = scope2.serviceProvider.getRequiredService(interface1Type) as Interface1
+		@Expect(interface1Option_3.isSome())
+		let interface1_3 = interface1Option_3.getOrThrow()
+		@Expect(interface1_3.toString() == "Class1")
+
+		@Expect(refEq((interface1_1 as Object).getOrThrow(), (interface1_2 as Object).getOrThrow()))
+		@Expect(!refEq((interface1_2 as Object).getOrThrow(), (interface1_3 as Object).getOrThrow()))
+
+		scope1.close()
+		scope2.close()
+
+		@Expect(provider.getService(class1Type).isNone())
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
+	}
+
+	@TestCase
+	func scopeRelatedObjectInject() {
+		let interface1Type = TypeInfo.of<Interface1>()
+		let class1Type = TypeInfo.of<Class1>()
+		let interface2Type = TypeInfo.of<Interface2>()
+		let class2Type = TypeInfo.of<Class2>()
+		let interface3Type = TypeInfo.of<Interface3>()
+		let class3Type = TypeInfo.of<Class3>()
+
+		let services = ServiceCollection()
+		services.addScoped(interface1Type, class1Type)
+		services.addScoped(interface2Type, class2Type)
+		services.addScoped(interface3Type, class3Type)
+		let provider = services.buildServiceProvider()
+		let scopeFactory = IServiceProvider.getRequiredService1<IServiceScopeFactory>(provider)
+		let scope1 = scopeFactory.createScope()
+		let scope2 = scopeFactory.createScope()
+		
+		let objectOption_1 = scope1.serviceProvider.getService(interface3Type)
+		@Expect(objectOption_1.isSome())
+		let interface3Option_1 = objectOption_1.getOrThrow() as Interface3
+		@Expect(interface3Option_1.isSome())
+		let interface3_1 = interface3Option_1.getOrThrow()
+		@Expect(interface3_1.toString() == "Class3(Class1, Class2(Class1))")
+		
+		let interface3Option_2 = scope1.serviceProvider.getRequiredService(interface3Type) as Interface3
+		@Expect(interface3Option_2.isSome())
+		let interface3_2 = interface3Option_2.getOrThrow()
+		@Expect(interface3_2.toString() == "Class3(Class1, Class2(Class1))")
+		
+		let interface3Option_3 = scope2.serviceProvider.getRequiredService(interface3Type) as Interface3
+		@Expect(interface3Option_3.isSome())
+		let interface3_3 = interface3Option_3.getOrThrow()
+		@Expect(interface3_3.toString() == "Class3(Class1, Class2(Class1))")
+
+		@Expect(refEq((interface3_1 as Object).getOrThrow(), (interface3_2 as Object).getOrThrow()))
+		@Expect(!refEq((interface3_2 as Object).getOrThrow(), (interface3_3 as Object).getOrThrow()))
+
+		scope1.close()
+		scope2.close()
+
+		@Expect(provider.getService(class1Type).isNone())
+		@Expect(provider.getService(class2Type).isNone())
+		@Expect(provider.getService(class3Type).isNone())
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class2Type))
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class3Type))
 	}
 }
