@@ -67,3 +67,7 @@ main(): Unit {
 
 Because Cangjie's reflection system is not yet complete, it can't reflect open generic types and enumeration types, such as `Array<>` and `Option<T>`, so there are some limitations on its use.  
 Currently, we only support simple Interface-Implementation relationships, but not generic types such as `Iterable<T>`.  
+
+## Special Thanks
+
+Special thanks to the Cangjie Development Team and the group members of the Cangjie Hongmeng Native Application Development Exchange Group for their help.

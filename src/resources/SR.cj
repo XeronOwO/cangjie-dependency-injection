@@ -132,6 +132,8 @@ public class SR {
 	private static let _parameterIndexRegex = Regex(##"\{(\d+)\}"##)
 
 	private static func formatParamterIndex(format: String, args: Array<ToString>): String {
+		// Thanks to 祥子 for the code reference
+
 		let matcher = _parameterIndexRegex.matcher(format)
 		let matchesOption = matcher.findAll()
 		let stringBuilder = StringBuilder()
