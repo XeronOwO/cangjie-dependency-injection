@@ -57,6 +57,9 @@ private class ServiceProviderTest {
 
 	- NoInject: No constructor injection.
 	- Inject:   Constructor injection.
+
+	- <None>: No key.
+	- Keyed:  With key.
 	*/
 
 	@TestCase
@@ -89,6 +92,76 @@ private class ServiceProviderTest {
 	}
 
 	@TestCase
+	func transientRelatedObjectNoInject() {
+		let interface1Type = TypeInfo.of<Interface1>()
+		let class1Type = TypeInfo.of<Class1>()
+
+		let services = ServiceCollection()
+		services.addTransient(interface1Type, class1Type)
+		let provider = services.buildServiceProvider()
+		
+		let objectOption_1 = provider.getService(interface1Type)
+		@Expect(objectOption_1.isSome())
+		let interface1Option_1 = objectOption_1.getOrThrow() as Interface1
+		@Expect(interface1Option_1.isSome())
+		let interface1_1 = interface1Option_1.getOrThrow()
+		@Expect(interface1_1.toString() == "Class1")
+		
+		let interface1Option_2 = provider.getRequiredService(interface1Type) as Interface1
+		@Expect(interface1Option_2.isSome())
+		let interface1_2 = interface1Option_2.getOrThrow()
+		@Expect(interface1_2.toString() == "Class1")
+
+		@Expect(!refEq((interface1_1 as Object).getOrThrow(), (interface1_2 as Object).getOrThrow()))
+
+		let class1ObjectOption = provider.getService(class1Type)
+		@Expect(class1ObjectOption.isNone())
+
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
+	}
+
+	@TestCase
+	func transientRelatedObjectInject() {
+		let interface1Type = TypeInfo.of<Interface1>()
+		let class1Type = TypeInfo.of<Class1>()
+		let interface2Type = TypeInfo.of<Interface2>()
+		let class2Type = TypeInfo.of<Class2>()
+		let interface3Type = TypeInfo.of<Interface3>()
+		let class3Type = TypeInfo.of<Class3>()
+
+		let services = ServiceCollection()
+		services.addTransient(interface1Type, class1Type)
+		services.addTransient(interface2Type, class2Type)
+		services.addTransient(interface3Type, class3Type)
+		let provider = services.buildServiceProvider()
+		
+		let objectOption_1 = provider.getService(interface3Type)
+		@Expect(objectOption_1.isSome())
+		let interface3Option_1 = objectOption_1.getOrThrow() as Interface3
+		@Expect(interface3Option_1.isSome())
+		let interface3_1 = interface3Option_1.getOrThrow()
+		@Expect(interface3_1.toString() == "Class3(Class1, Class2(Class1))")
+		
+		let interface3Option_2 = provider.getRequiredService(interface3Type) as Interface3
+		@Expect(interface3Option_2.isSome())
+		let interface3_2 = interface3Option_2.getOrThrow()
+		@Expect(interface3_2.toString() == "Class3(Class1, Class2(Class1))")
+
+		@Expect(!refEq((interface3_1 as Object).getOrThrow(), (interface3_2 as Object).getOrThrow()))
+
+		let class1ObjectOption = provider.getService(class1Type)
+		@Expect(class1ObjectOption.isNone())
+		let class2ObjectOption = provider.getService(class2Type)
+		@Expect(class2ObjectOption.isNone())
+		let class3ObjectOption = provider.getService(class3Type)
+		@Expect(class3ObjectOption.isNone())
+
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class1Type))
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class2Type))
+		@ExpectThrows[InvalidOperationException](provider.getRequiredService(class3Type))
+	}
+
+	@TestCase
 	func transientUnrelatedTNoInject() {
 		let services = ServiceCollection()
 		IServiceCollection.addTransient1<Class1>(services)
@@ -108,5 +181,57 @@ private class ServiceProviderTest {
 		@Expect(interface1Option.isNone())
 
 		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Interface1>(provider))
+	}
+
+	@TestCase
+	func transientRelatedTNoInject() {
+		let services = ServiceCollection()
+		IServiceCollection.addTransient2<Interface1, Class1>(services)
+		let provider = services.buildServiceProvider()
+		
+		let interface1Option_1 = IServiceProvider.getService1<Interface1>(provider)
+		@Expect(interface1Option_1.isSome())
+		let interface1_1 = interface1Option_1.getOrThrow()
+		@Expect(interface1_1.toString() == "Class1")
+		
+		let interface1_2 = IServiceProvider.getRequiredService1<Interface1>(provider)
+		@Expect(interface1_2.toString() == "Class1")
+
+		@Expect(!refEq((interface1_1 as Object).getOrThrow(), (interface1_2 as Object).getOrThrow()))
+
+		let class1Option = IServiceProvider.getService1<Class1>(provider)
+		@Expect(class1Option.isNone())
+
+		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class1>(provider))
+	}
+
+	@TestCase
+	func transientRelatedTInject() {
+		let services = ServiceCollection()
+		IServiceCollection.addTransient2<Interface1, Class1>(services)
+		IServiceCollection.addTransient2<Interface2, Class2>(services)
+		IServiceCollection.addTransient2<Interface3, Class3>(services)
+		let provider = services.buildServiceProvider()
+		
+		let interface3Option_1 = IServiceProvider.getService1<Interface3>(provider)
+		@Expect(interface3Option_1.isSome())
+		let interface3_1 = interface3Option_1.getOrThrow()
+		@Expect(interface3_1.toString() == "Class3(Class1, Class2(Class1))")
+		
+		let interface3_2 = IServiceProvider.getRequiredService1<Interface3>(provider)
+		@Expect(interface3_2.toString() == "Class3(Class1, Class2(Class1))")
+
+		@Expect(!refEq((interface3_1 as Object).getOrThrow(), (interface3_2 as Object).getOrThrow()))
+
+		let class1Option = IServiceProvider.getService1<Class1>(provider)
+		@Expect(class1Option.isNone())
+		let class2Option = IServiceProvider.getService1<Class2>(provider)
+		@Expect(class2Option.isNone())
+		let class3Option = IServiceProvider.getService1<Class3>(provider)
+		@Expect(class3Option.isNone())
+
+		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class1>(provider))
+		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class2>(provider))
+		@ExpectThrows[InvalidOperationException](IServiceProvider.getRequiredService1<Class3>(provider))
 	}
 }
