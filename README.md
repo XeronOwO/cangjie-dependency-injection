@@ -70,4 +70,4 @@ Currently, we only support simple Interface-Implementation relationships, but no
 
 ## Special Thanks
 
-Special thanks to the Cangjie Development Team and the group members of the Cangjie Hongmeng Native Application Development Exchange Group for their help.
+Special thanks to the Cangjie Development Team and the group members of the Cangjie HarmonyOS Application Development Exchange Group for their help.
