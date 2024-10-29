@@ -151,13 +151,16 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		}
 		let serviceAccessor = _serviceAccessors.getOrAdd(serviceIdentifier, _createServiceAccessor.getOrThrow())
 		onResolve(serviceAccessor.callSite, serviceProviderEngineScope)
-		let result: ?Object
+		
 		if (serviceAccessor.realizedService.isNone()) {
-			result = None
+			return None
 		} else {
-			result = (serviceAccessor.realizedService.getOrThrow()(serviceProviderEngineScope).getOrThrow() as Object).getOrThrow()
+			let instance = serviceAccessor.realizedService.getOrThrow()(serviceProviderEngineScope)
+			if (instance.isNone()) {
+				return None
+			}
+			return instance.getOrThrow() as Object
 		}
-		return result
 	}
 
 	private func validateService(descriptor: ServiceDescriptor) {

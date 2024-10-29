@@ -51,7 +51,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addTransient2<TService, TImplementation>(
 		services: IServiceCollection
-	): IServiceCollection where TImplementation <: Object & TService
+		): IServiceCollection where TImplementation <: Object & TService {
+		return services.addTransient(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a transient service of the type specified in serviceType to the
@@ -77,7 +79,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addTransient1<TService>(
 		services: IServiceCollection
-	): IServiceCollection where TService <: Object
+	): IServiceCollection where TService <: Object {
+		return services.addTransient(TypeInfo.of<TService>())
+	}
 
 	/*
 	Adds a transient service of the type specified in TService with a
@@ -94,7 +98,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addTransient1<TService>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addTransient(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a transient service of the type specified in TService with an
@@ -112,7 +118,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addTransient2<TService, TImplementation>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addTransient(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a scoped service of the type specified in serviceType with an
@@ -158,7 +166,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addScoped2<TService, TImplementation>(
 		services: IServiceCollection
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addScoped(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a scoped service of the type specified in serviceType to the
@@ -184,7 +194,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addScoped1<TService>(
 		services: IServiceCollection
-	): IServiceCollection where TService <: Object
+	): IServiceCollection where TService <: Object {
+		return services.addScoped(TypeInfo.of<TService>())
+	}
 
 	/*
 	Adds a scoped service of the type specified in TService with a
@@ -201,7 +213,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addScoped1<TService>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addScoped(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a scoped service of the type specified in TService with an
@@ -219,7 +233,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addScoped2<TService, TImplementation>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addScoped(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in serviceType with an
@@ -265,7 +281,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addSingleton2<TService, TImplementation>(
 		services: IServiceCollection
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addSingleton(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a singleton service of the type specified in serviceType to the
@@ -291,7 +309,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	*/
 	static func addSingleton1<TService>(
 		services: IServiceCollection
-	): IServiceCollection where TService <: Object
+	): IServiceCollection where TService <: Object {
+		return services.addSingleton(TypeInfo.of<TService>())
+	}
 
 	/*
 	Adds a singleton service of the type specified in TService with a
@@ -308,7 +328,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addSingleton1<TService>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addSingleton(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in TService with an
@@ -326,7 +348,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addSingleton2<TService, TImplementation>(
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addSingleton(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in serviceType with an
@@ -358,7 +382,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addSingleton1<TService>(
 		services: IServiceCollection,
 		implementationInstance: TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addSingleton(TypeInfo.of<TService>(), (implementationInstance as Object).getOrThrow())
+	}
 
 	/*
 	Adds a transient service of the type specified in serviceType with an
@@ -410,7 +436,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedTransient2<TService, TImplementation>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a transient service of the type specified in TService to the
@@ -440,7 +468,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedTransient1<TService>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TService <: Object
+	): IServiceCollection where TService <: Object {
+		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey)
+	}
 
 	/*
 	Adds a transient service of the type specified in TService with a
@@ -459,7 +489,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a transient service of the type specified in TService with an
@@ -480,7 +512,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a scoped service of the type specified in serviceType with an
@@ -532,7 +566,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedScoped2<TService, TImplementation>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a scoped service of the type specified in TService to the
@@ -562,7 +598,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedScoped1<TService>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TService <: Object
+	): IServiceCollection {
+		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey)
+	}
 
 	/*
 	Adds a scoped service of the type specified in TService with a
@@ -581,7 +619,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a scoped service of the type specified in TService with an
@@ -602,7 +642,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in serviceType with an
@@ -654,7 +696,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedSingleton2<TService, TImplementation>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
+	}
 
 	/*
 	Adds a singleton service of the type specified in TService to the
@@ -684,7 +728,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 	static func addKeyedSingleton1<TService>(
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TService <: Object
+	): IServiceCollection {
+		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TService>())
+	}
 
 	/*
 	Adds a singleton service of the type specified in TService with a
@@ -703,7 +749,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in TService with an
@@ -724,7 +772,9 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService
+	): IServiceCollection where TImplementation <: Object & TService {
+		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
+	}
 
 	/*
 	Adds a singleton service of the type specified in serviceType with an
@@ -760,5 +810,7 @@ public interface IServiceCollection <: IList<ServiceDescriptor> {
 		services: IServiceCollection,
 		serviceKey: ?HashableEquatable<?Any>,
 		implementationInstance: TService
-	): IServiceCollection
+	): IServiceCollection {
+		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, (implementationInstance as Object).getOrThrow())
+	}
 }

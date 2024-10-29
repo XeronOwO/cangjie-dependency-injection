@@ -94,36 +94,10 @@ public class ServiceCollection <: IServiceCollection {
 		return add2(this, serviceType, implementationFactory, ServiceLifetime.Transient)
 	}
 
-	public static func addTransient2<TService, TImplementation>(
-		services: IServiceCollection
-		): IServiceCollection where TImplementation <: Object & TService {
-		return services.addTransient(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
-	}
-
 	public func addTransient(
 		serviceType: TypeInfo
 	): IServiceCollection {
 		return addTransient(serviceType, serviceType)
-	}
-
-	public static func addTransient1<TService>(
-		services: IServiceCollection
-	): IServiceCollection where TService <: Object {
-		return services.addTransient(TypeInfo.of<TService>())
-	}
-
-	public static func addTransient1<TService>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection {
-		return services.addTransient(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
-	}
-
-	public static func addTransient2<TService, TImplementation>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addTransient(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
 	}
 
 	public func addScoped(
@@ -140,36 +114,10 @@ public class ServiceCollection <: IServiceCollection {
 		return add2(this, serviceType, implementationFactory, ServiceLifetime.Scoped)
 	}
 
-	public static func addScoped2<TService, TImplementation>(
-		services: IServiceCollection
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addScoped(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
-	}
-
 	public func addScoped(
 		serviceType: TypeInfo
 	): IServiceCollection {
 		return addScoped(serviceType, serviceType)
-	}
-
-	public static func addScoped1<TService>(
-		services: IServiceCollection
-	): IServiceCollection where TService <: Object {
-		return services.addScoped(TypeInfo.of<TService>())
-	}
-
-	public static func addScoped1<TService>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection {
-		return services.addScoped(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
-	}
-
-	public static func addScoped2<TService, TImplementation>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addScoped(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
 	}
 
 	public func addSingleton(
@@ -186,36 +134,10 @@ public class ServiceCollection <: IServiceCollection {
 		return add2(this, serviceType, implementationFactory, ServiceLifetime.Singleton)
 	}
 
-	public static func addSingleton2<TService, TImplementation>(
-		services: IServiceCollection
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addSingleton(TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
-	}
-
 	public func addSingleton(
 		serviceType: TypeInfo
 	): IServiceCollection {
 		return addSingleton(serviceType, serviceType)
-	}
-
-	public static func addSingleton1<TService>(
-		services: IServiceCollection
-	): IServiceCollection where TService <: Object {
-		return services.addSingleton(TypeInfo.of<TService>())
-	}
-
-	public static func addSingleton1<TService>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection {
-		return services.addSingleton(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
-	}
-
-	public static func addSingleton2<TService, TImplementation>(
-		services: IServiceCollection,
-		implementationFactory: (IServiceProvider) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addSingleton(TypeInfo.of<TService>(), { sp => (implementationFactory(sp) as Object).getOrThrow() })
 	}
 
 	public func addSingleton(
@@ -225,13 +147,6 @@ public class ServiceCollection <: IServiceCollection {
 		var serviceDescriptor = ServiceDescriptor(serviceType, implementationInstance)
 		add(serviceDescriptor)
 		return this
-	}
-
-	public static func addSingleton1<TService>(
-		services: IServiceCollection,
-		implementationInstance: TService
-	): IServiceCollection {
-		return services.addSingleton(TypeInfo.of<TService>(), (implementationInstance as Object).getOrThrow())
 	}
 
 	private static func add2(
@@ -272,41 +187,11 @@ public class ServiceCollection <: IServiceCollection {
 		return addKeyed(this, serviceType, serviceKey, implementationFactory, ServiceLifetime.Transient)
 	}
 
-	public static func addKeyedTransient2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
-	}
-
 	public func addKeyedTransient(
 		serviceType: TypeInfo,
 		serviceKey: ?HashableEquatable<?Any>
 	): IServiceCollection {
 		return addKeyedTransient(serviceType, serviceKey, serviceType)
-	}
-
-	public static func addKeyedTransient1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TService <: Object {
-		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey)
-	}
-
-	public static func addKeyedTransient1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection {
-		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
-	}
-
-	public static func addKeyedTransient2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedTransient(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
 	}
 
 	public func addKeyedScoped(
@@ -325,41 +210,11 @@ public class ServiceCollection <: IServiceCollection {
 		return addKeyed(this, serviceType, serviceKey, implementationFactory, ServiceLifetime.Scoped)
 	}
 
-	public static func addKeyedScoped2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
-	}
-
 	public func addKeyedScoped(
 		serviceType: TypeInfo,
 		serviceKey: ?HashableEquatable<?Any>
 	): IServiceCollection {
 		return addKeyedScoped(serviceType, serviceKey, serviceType)
-	}
-
-	public static func addKeyedScoped1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection {
-		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey)
-	}
-
-	public static func addKeyedScoped1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection {
-		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
-	}
-
-	public static func addKeyedScoped2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedScoped(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
 	}
 
 	public func addKeyedSingleton(
@@ -378,41 +233,11 @@ public class ServiceCollection <: IServiceCollection {
 		return addKeyed(this, serviceType, serviceKey, implementationFactory, ServiceLifetime.Singleton)
 	}
 
-	public static func addKeyedSingleton2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
-	}
-
 	public func addKeyedSingleton(
 		serviceType: TypeInfo,
 		serviceKey: ?HashableEquatable<?Any>
 	): IServiceCollection {
 		return addKeyedSingleton(serviceType, serviceKey, serviceType)
-	}
-
-	public static func addKeyedSingleton1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>
-	): IServiceCollection {
-		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TService>())
-	}
-
-	public static func addKeyedSingleton1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection {
-		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
-	}
-
-	public static func addKeyedSingleton2<TService, TImplementation>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationFactory: (IServiceProvider, ?HashableEquatable<?Any>) -> TService
-	): IServiceCollection where TImplementation <: Object & TService {
-		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, { sp, key => (implementationFactory(sp, key) as Object).getOrThrow() })
 	}
 
 	public func addKeyedSingleton(
@@ -423,14 +248,6 @@ public class ServiceCollection <: IServiceCollection {
 		let descriptor = ServiceDescriptor(serviceType, serviceKey, implementationInstance)
 		add(descriptor)
 		return this
-	}
-
-	public static func addKeyedSingleton1<TService>(
-		services: IServiceCollection,
-		serviceKey: ?HashableEquatable<?Any>,
-		implementationInstance: TService
-	): IServiceCollection {
-		return services.addKeyedSingleton(TypeInfo.of<TService>(), serviceKey, (implementationInstance as Object).getOrThrow())
 	}
 
 	private static func addKeyed(
