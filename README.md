@@ -16,6 +16,7 @@ Dependency injection module for Cangjie programming language, inspired by  [Micr
 package app
 
 import dependency_injection.*
+import dependency_injection.abstractions.*
 import std.collection.*
 import std.reflect.*
 import std.unittest.*
@@ -50,15 +51,15 @@ class C3 <: I3 {
 	public func toString(): String { "C3(${_i1}, ${_i2})" }
 }
 
-@Test
 main(): Unit {
 	let services = ServiceCollection()
-	ServiceCollection.addTransient2<I1, C1>(services)
-	ServiceCollection.addTransient2<I2, C2>(services)
-	ServiceCollection.addTransient2<I3, C3>(services)
-	let provider = ServiceProvider(services, ServiceProviderOptions())
-	let i3 = IServiceProvider.getRequiredService1<I3>(provider)
-	@Expect(i3.toString() == "C3(C1, C2(C1))")
+	ServiceCollectionServiceExtensions.addTransient2<I1, C1>(services)
+	ServiceCollectionServiceExtensions.addTransient2<I2, C2>(services)
+	ServiceCollectionServiceExtensions.addTransient2<I3, C3>(services)
+	let provider = ServiceCollectionContainerBuilderExtensions.buildServiceProvider(services)
+	let i3 = ServiceProviderServiceExtensions.getRequiredService1<I3>(provider)
+	println("Expect: C3(C1, C2(C1))")
+	println("Actual: ${i3}")
 }
 
 ```

@@ -67,7 +67,7 @@ public class ServiceCollectionServiceExtensions {
 	public static func addTransient2<TService, TImplementation>(
 		services: IServiceCollection
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addTransient(services, TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
 	}
@@ -140,7 +140,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addTransient(services, TypeInfo.of<TService>(), implementationFactory)
 	}
@@ -198,7 +198,7 @@ public class ServiceCollectionServiceExtensions {
 	public static func addScoped2<TService, TImplementation>(
 		services: IServiceCollection
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addScoped(services, TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
 	}
@@ -271,7 +271,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addScoped(services, TypeInfo.of<TService>(), implementationFactory)
 	}
@@ -329,7 +329,7 @@ public class ServiceCollectionServiceExtensions {
 	public static func addSingleton2<TService, TImplementation>(
 		services: IServiceCollection
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addSingleton(services, TypeInfo.of<TService>(), TypeInfo.of<TImplementation>())
 	}
@@ -402,7 +402,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		implementationFactory: (IServiceProvider) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addSingleton(services, TypeInfo.of<TService>(), implementationFactory)
 	}
@@ -536,7 +536,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		serviceKey: ?IHashableEquatableToString<?Any>
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedTransient(services, TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
 	}
@@ -618,7 +618,7 @@ public class ServiceCollectionServiceExtensions {
 		serviceKey: ?IHashableEquatableToString<?Any>,
 		implementationFactory: (IServiceProvider, ?IHashableEquatableToString<?Any>) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedTransient(services, TypeInfo.of<TService>(), serviceKey, implementationFactory)
 	}
@@ -682,7 +682,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		serviceKey: ?IHashableEquatableToString<?Any>
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedScoped(services, TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
 	}
@@ -764,7 +764,7 @@ public class ServiceCollectionServiceExtensions {
 		serviceKey: ?IHashableEquatableToString<?Any>,
 		implementationFactory: (IServiceProvider, ?IHashableEquatableToString<?Any>) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedScoped(services, TypeInfo.of<TService>(), serviceKey, implementationFactory)
 	}
@@ -828,7 +828,7 @@ public class ServiceCollectionServiceExtensions {
 		services: IServiceCollection,
 		serviceKey: ?IHashableEquatableToString<?Any>
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedSingleton(services, TypeInfo.of<TService>(), serviceKey, TypeInfo.of<TImplementation>())
 	}
@@ -910,7 +910,7 @@ public class ServiceCollectionServiceExtensions {
 		serviceKey: ?IHashableEquatableToString<?Any>,
 		implementationFactory: (IServiceProvider, ?IHashableEquatableToString<?Any>) -> TImplementation
 	): IServiceCollection
-	where TService <: Object, TImplementation <: Object {
+	where TImplementation <: Object {
 		ensureSubtype<TService, TImplementation>()
 		return addKeyedSingleton(services, TypeInfo.of<TService>(), serviceKey, implementationFactory)
 	}
