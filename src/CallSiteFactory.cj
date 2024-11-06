@@ -1,9 +1,8 @@
 package dependency_injection
 
-import dependency_injection.debug.*
-import dependency_injection.exceptions.*
-import dependency_injection.resources.*
-import dependency_injection.runtime.*
+import dependency_injection.abstractions.*
+import dependency_injection.component_model.*
+import dependency_injection.corelib.*
 import std.collection.*
 import std.collection.concurrent.*
 import std.reflect.*
@@ -16,8 +15,8 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 	private let _descriptorLookup = HashMap<ServiceIdentifier, ServiceDescriptorCacheItem>()
 	private let _callSiteLocks = ConcurrentHashMap<ServiceIdentifier, ReentrantMutex>()
 
-	public init(descriptors: Collection<ServiceDescriptor>) {
-		_descriptors = ArrayList<ServiceDescriptor>(descriptors).toArray()
+	public init(descriptors: ICollection<ServiceDescriptor>) {
+		_descriptors = IterableExtensions.toArray(descriptors)
 
 		populate()
 	}
@@ -166,7 +165,7 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 			var parameterCallSites: ?Array<ServiceCallSite> = None
 
 			if (constructors.isEmpty()) {
-				throw InvalidOperationException(SR.format(SR.NoConstructorMatched, [implementationType.name]))
+				throw InvalidOperationException(SR.format(SR.NoConstructorMatch, [implementationType.name]))
 			} else if (constructors.size == 1) {
 				let constructor = constructors.iterator().first().getOrThrow()
 				let parameters = constructor.parameters
@@ -307,7 +306,7 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 		isService(ServiceIdentifier.fromServiceType(serviceType))
 	}
 
-	public override func isKeyedService(serviceType: TypeInfo, key: ?HashableEquatable<?Any>): Bool {
+	public override func isKeyedService(serviceType: TypeInfo, key: ?IHashableEquatableToString<?Any>): Bool {
 		isService(ServiceIdentifier(key, serviceType))
 	}
 

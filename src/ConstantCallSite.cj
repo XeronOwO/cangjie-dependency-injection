@@ -1,7 +1,7 @@
 package dependency_injection
 
-import dependency_injection.exceptions.*
-import dependency_injection.resources.*
+import dependency_injection.abstractions.*
+import dependency_injection.corelib.*
 import std.reflect.*
 
 internal class ConstantCallSite <: ServiceCallSite {
@@ -37,20 +37,5 @@ internal class ConstantCallSite <: ServiceCallSite {
 
 	public override prop kind: CallSiteKind {
 		get() { CallSiteKind.Constant }
-	}
-}
-
-extend TypeInfo {
-	public func isInstanceOfType(value: Any): Bool {
-		let valueType = TypeInfo.of(value)
-		if (valueType == this) {
-			return true
-		}
-
-		if (valueType.isSubtypeOf(this)) {
-			return true
-		}
-
-		return false
 	}
 }

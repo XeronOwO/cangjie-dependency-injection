@@ -1,7 +1,8 @@
 package dependency_injection
 
-import dependency_injection.exceptions.*
-import dependency_injection.resources.*
+import dependency_injection.abstractions.*
+import dependency_injection.component_model.*
+import dependency_injection.corelib.*
 import std.collection.*
 import std.collection.concurrent.*
 import std.reflect.*
@@ -30,7 +31,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		get() { _root.getOrThrow() }
 	}
 
-	internal init(serviceDescriptors: Collection<ServiceDescriptor>, options: ServiceProviderOptions) {
+	internal init(serviceDescriptors: ICollection<ServiceDescriptor>, options: ServiceProviderOptions) {
 		_engine = RuntimeServiceProviderEngine.instance
 		_serviceAccessors = ConcurrentHashMap()
 
@@ -90,11 +91,11 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 
 	returns: The keyed service.
 	*/
-	public override func getKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>): ?Object {
+	public override func getKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>): ?Object {
 		getKeyedService(serviceType, serviceKey, root)
 	}
 
-	internal func getKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>, serviceProviderEngineScope: ServiceProviderEngineScope): ?Object {
+	internal func getKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>, serviceProviderEngineScope: ServiceProviderEngineScope): ?Object {
 		getService(ServiceIdentifier(serviceKey, serviceType), serviceProviderEngineScope)
 	}
 
@@ -106,11 +107,11 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 
 	returns: The keyed service.
 	*/
-	public override func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>): Object {
+	public override func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>): Object {
 		getRequiredKeyedService(serviceType, serviceKey, root)
 	}
 
-	internal func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>, serviceProviderEngineScope: ServiceProviderEngineScope): Object {
+	internal func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>, serviceProviderEngineScope: ServiceProviderEngineScope): Object {
 		let service = getKeyedService(serviceType, serviceKey, serviceProviderEngineScope)
 		if (service.isNone()) {
 			throw InvalidOperationException(SR.format(SR.NoServiceRegistered, serviceType))
@@ -122,7 +123,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		return _closed
 	}
 
-	public override func close() {
+	public override func close(): Unit {
 		closeCore()
 		root.close()
 	}
@@ -155,11 +156,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		if (serviceAccessor.realizedService.isNone()) {
 			return None
 		} else {
-			let instance = serviceAccessor.realizedService.getOrThrow()(serviceProviderEngineScope)
-			if (instance.isNone()) {
-				return None
-			}
-			return instance.getOrThrow() as Object
+			return serviceAccessor.realizedService.getOrThrow()(serviceProviderEngineScope)
 		}
 	}
 
@@ -211,7 +208,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 		return serviceAccessor
 	}
 
-	internal func replaceServiceAccessor(callSite: ServiceCallSite, accessor: (ServiceProviderEngineScope) -> ?Any) {
+	internal func replaceServiceAccessor(callSite: ServiceCallSite, accessor: (ServiceProviderEngineScope) -> ?Object) {
 		var serviceAccessor = ServiceAccessor()
 		serviceAccessor.callSite = callSite
 		serviceAccessor.realizedService = accessor
@@ -235,9 +232,9 @@ private class ServiceAccessor {
 		set(value) { _callSite = value }
 	}
 
-	private var _realizedService: ?(ServiceProviderEngineScope) -> ?Any = None
+	private var _realizedService: ?(ServiceProviderEngineScope) -> ?Object = None
 
-	public mut prop realizedService: ?(ServiceProviderEngineScope) -> ?Any {
+	public mut prop realizedService: ?(ServiceProviderEngineScope) -> ?Object {
 		get() { _realizedService }
 		set(value) { _realizedService = value }
 	}

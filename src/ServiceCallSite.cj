@@ -1,5 +1,6 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
 import std.reflect.*
 import std.sync.*
 
@@ -9,8 +10,6 @@ import std.sync.*
 internal abstract class ServiceCallSite {
 	protected init(cache: ResultCache) {
 		_cache = cache
-		_value = None
-		_key = None
 	}
 
 	public open prop serviceType: TypeInfo
@@ -25,23 +24,23 @@ internal abstract class ServiceCallSite {
 		get() { _cache }
 	}
 
-	private var _value: ?Any
+	private var _value: ?Any = None
 
 	public mut prop value: ?Any {
 		get() { _value }
 		set(value) { _value = value }
 	}
 
-	private var _key: ?HashableEquatable<?Any>
+	private var _key: ?IHashableEquatableToString<?Any> = None
 
-	public mut prop key: ?HashableEquatable<?Any> {
+	public mut prop key: ?IHashableEquatableToString<?Any> {
 		get() { _key }
 		set(value) { _key = value }
 	}
 
 	public func captureResource(): Bool {
 		return implementationType.isNone() ||
-			TypeInfo.of<Resource>().isSubtypeOf(implementationType.getOrThrow())
+			implementationType.getOrThrow().isSubtypeOf(TypeInfo.of<Resource>())
 	}
 
 	private let _sync = ReentrantMutex()

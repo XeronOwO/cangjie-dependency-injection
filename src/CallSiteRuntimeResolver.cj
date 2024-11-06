@@ -1,6 +1,6 @@
 package dependency_injection
 
-import dependency_injection.exceptions.*
+import dependency_injection.corelib.*
 import std.collection.*
 import std.sync.*
 
@@ -14,15 +14,18 @@ internal class CallSiteRuntimeResolver <: CallSiteVisitor<RuntimeResolverContext
 	private init() {
 	}
 
-	public func resolve(callSite: ServiceCallSite, scope: ServiceProviderEngineScope): ?Any {
+	public func resolve(callSite: ServiceCallSite, scope: ServiceProviderEngineScope): ?Object {
 		// Fast path to avoid virtual calls if we already have the cached value in the root scope
 		if (scope.isRootScope && callSite.value.isSome()) {
-			return callSite.value.getOrThrow()
+			return callSite.value.getOrThrow() as Object
 		}
 
 		var context = RuntimeResolverContext()
 		context.scope = scope
-		return visitCallSite(callSite, context)
+		if (let Some(result) <- visitCallSite(callSite, context)) {
+			return result as Object
+		}
+		return None
 	}
 
 	protected override func visitResourceCache(transientCallSite: ServiceCallSite, context: RuntimeResolverContext): ?Any {
@@ -127,7 +130,7 @@ internal class CallSiteRuntimeResolver <: CallSiteVisitor<RuntimeResolverContext
 	}
 
 	protected override func visitIterable(_: IterableCallSite, _: RuntimeResolverContext): ?Any {
-		throw NotSupportedException()
+		throw NotImplementedException()
 	}
 
 	protected override func visitFactory(factoryCallSite: FactoryCallSite, context: RuntimeResolverContext): ?Any {

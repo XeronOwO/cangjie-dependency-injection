@@ -1,7 +1,8 @@
 package dependency_injection
 
-import dependency_injection.exceptions.*
-import dependency_injection.resources.*
+import dependency_injection.abstractions.*
+import dependency_injection.component_model.*
+import dependency_injection.corelib.*
 import std.collection.*
 import std.reflect.*
 import std.sync.*
@@ -63,7 +64,7 @@ internal class ServiceProviderEngineScope <: IServiceScope & IServiceProvider & 
 		return rootProvider.getService(ServiceIdentifier.fromServiceType(serviceType), this)
 	}
 
-	public override func getKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>): ?Object {
+	public override func getKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>): ?Object {
 		if (_closed) {
 			ThrowHelper.throwResourceClosedException()
 		}
@@ -71,7 +72,7 @@ internal class ServiceProviderEngineScope <: IServiceScope & IServiceProvider & 
 		return rootProvider.getKeyedService(serviceType, serviceKey, this)
 	}
 
-	public override func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?HashableEquatable<?Any>): Object {
+	public override func getRequiredKeyedService(serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>): Object {
 		if (_closed) {
 			ThrowHelper.throwResourceClosedException()
 		}
@@ -134,8 +135,7 @@ internal class ServiceProviderEngineScope <: IServiceScope & IServiceProvider & 
 				let resourceOption = toClose[i] as Resource
 				if (resourceOption.isSome()) {
 					resourceOption.getOrThrow().close()
-				}
-				else {
+				} else {
 					throw InvalidOperationException(SR.format(SR.AsyncResourceServiceClose, [TypeInfo.of(toClose[i]).name]))
 				}
 			}

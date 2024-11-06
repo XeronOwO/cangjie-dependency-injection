@@ -10,7 +10,7 @@ internal class RuntimeServiceProviderEngine <: ServiceProviderEngine {
 	private init() {
 	}
 
-	public override func realizeService(callSite: ServiceCallSite): (ServiceProviderEngineScope) -> ?Any {
+	public override func realizeService(callSite: ServiceCallSite): (ServiceProviderEngineScope) -> ?Object {
 		return {
 			scope => CallSiteRuntimeResolver.instance.resolve(callSite, scope)
 		}

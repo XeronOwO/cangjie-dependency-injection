@@ -1,5 +1,6 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
 import std.reflect.*
 
 internal struct ServiceCacheKey <: Hashable & Equatable<ServiceCacheKey> {
@@ -9,7 +10,7 @@ internal struct ServiceCacheKey <: Hashable & Equatable<ServiceCacheKey> {
 	Type of service being cached
 	*/
 	public prop serviceIdentifier: ServiceIdentifier {
-		get() { _serviceIdentifier}
+		get() { _serviceIdentifier }
 	}
 
 	private let _slot: Int
@@ -29,7 +30,7 @@ internal struct ServiceCacheKey <: Hashable & Equatable<ServiceCacheKey> {
 		get() { _slot}
 	}
 
-	public init(key: HashableEquatable<?Any>, typ: TypeInfo, slot: Int) {
+	public init(key: IHashableEquatableToString<?Any>, typ: TypeInfo, slot: Int) {
 		_serviceIdentifier = ServiceIdentifier(key, typ)
 		_slot = slot
 	}

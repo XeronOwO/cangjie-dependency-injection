@@ -1,5 +1,6 @@
 package dependency_injection
 
+import dependency_injection.component_model.*
 import std.reflect.*
 
 internal class ServiceProviderCallSite <: ServiceCallSite {

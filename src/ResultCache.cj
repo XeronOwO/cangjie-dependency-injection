@@ -1,5 +1,6 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
 import std.reflect.*
 
 internal struct ResultCache {

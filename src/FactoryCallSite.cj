@@ -1,5 +1,7 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
+import dependency_injection.component_model.*
 import std.reflect.*
 
 internal class FactoryCallSite <: ServiceCallSite {
@@ -16,7 +18,7 @@ internal class FactoryCallSite <: ServiceCallSite {
 		_serviceType = serviceType
 	}
 
-	public init(cache: ResultCache, serviceType: TypeInfo, serviceKey: Any, factory: (IServiceProvider, ?Any) -> Object) {
+	public init(cache: ResultCache, serviceType: TypeInfo, serviceKey: ?IHashableEquatableToString<?Any>, factory: (IServiceProvider, ?IHashableEquatableToString<?Any>) -> Object) {
 		super(cache)
 		
 		_factory = { sp => factory(sp, serviceKey) }

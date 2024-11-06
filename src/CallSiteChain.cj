@@ -1,8 +1,7 @@
 package dependency_injection
 
-import dependency_injection.exceptions.*
-import dependency_injection.resources.*
-import dependency_injection.runtime.*
+import dependency_injection.abstractions.*
+import dependency_injection.corelib.*
 import std.collection.*
 import std.reflect.*
 

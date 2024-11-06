@@ -1,11 +1,13 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
+import dependency_injection.corelib.*
 import std.reflect.*
 
-internal struct ServiceIdentifier <: Hashable & Equatable<ServiceIdentifier> {
-	private let _serviceKey: ?HashableEquatable<?Any>
+internal struct ServiceIdentifier <: Hashable & Equatable<ServiceIdentifier> & ToString {
+	private let _serviceKey: ?IHashableEquatableToString<?Any>
 
-	public prop serviceKey: ?HashableEquatable<?Any> {
+	public prop serviceKey: ?IHashableEquatableToString<?Any> {
 		get() { _serviceKey }
 	}
 
@@ -20,7 +22,7 @@ internal struct ServiceIdentifier <: Hashable & Equatable<ServiceIdentifier> {
 		_serviceType = serviceType
 	}
 
-	public init(serviceKey: ?HashableEquatable<?Any>, serviceType: TypeInfo) {
+	public init(serviceKey: ?IHashableEquatableToString<?Any>, serviceType: TypeInfo) {
 		_serviceKey = serviceKey
 		_serviceType = serviceType
 	}
@@ -33,21 +35,37 @@ internal struct ServiceIdentifier <: Hashable & Equatable<ServiceIdentifier> {
 		return ServiceIdentifier(serviceType)
 	}
 
-	public operator func ==(rhs: ServiceIdentifier): Bool {
-		if (serviceKey.isNone() && rhs.serviceKey.isNone()) {
-			return serviceType == rhs.serviceType
+	public override operator func ==(other: ServiceIdentifier): Bool {
+		if (serviceKey.isNone() && other.serviceKey.isNone()) {
+			return serviceType == other.serviceType
 		}
-		else if (serviceKey.isSome() && rhs.serviceKey.isSome()) {
-			return serviceType == rhs.serviceType && serviceKey.getOrThrow() == rhs.serviceKey.getOrThrow()
+		else if (serviceKey.isSome() && other.serviceKey.isSome()) {
+			return serviceType == other.serviceType && serviceKey.getOrThrow() == other.serviceKey.getOrThrow()
 		}
 		return false
 	}
 
-	public func hashCode(): Int64 {
+	public override func hashCode(): Int64 {
 		if (serviceKey.isNone()) {
 			return serviceType.hashCode()
 		} else {
 			return (serviceKey.getOrThrow().hashCode() * 397) ^ serviceType.hashCode()
 		}
+	}
+
+	public prop isConstructedGenericType: Bool {
+		get() { throw NotImplementedException() }
+	}
+
+	public func getGenericTypeDefinition(): ServiceIdentifier {
+		throw NotImplementedException()
+	}
+
+	public override func toString(): String {
+		if (serviceKey.isNone()) {
+			return serviceType.toString()
+		}
+
+		return "(${serviceKey}, ${serviceType})"
 	}
 }

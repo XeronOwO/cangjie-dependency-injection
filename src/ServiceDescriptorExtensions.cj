@@ -1,52 +1,52 @@
 package dependency_injection
 
+import dependency_injection.abstractions.*
 import std.reflect.*
 
 extend ServiceDescriptor {
 	public func hasImplementationInstance(): Bool {
-		getImplementationInstance().isSome()
+		return getImplementationInstance().isSome()
 	}
 
 	public func hasImplementationFactory(): Bool {
-		getImplementationFactory().isSome()
+		return getImplementationFactory().isSome()
 	}
 
 	public func hasImplementationType(): Bool {
-		getImplementationType().isSome()
+		return getImplementationType().isSome()
 	}
 
 	public func getImplementationInstance(): ?Object {
 		if (isKeyedService) {
 			return keyedImplementationInstance
-		} else {
-			return implementationInstance
 		}
+		return implementationInstance
 	}
 
 	public func getImplementationFactory(): ?Any {
 		if (isKeyedService) {
-			if (keyedImplementationFactory.isNone()) {
-				return None
+			if (let Some(factory) <- keyedImplementationFactory) {
+				return factory
 			}
-			return keyedImplementationFactory.getOrThrow()
-		} else {
-			if (implementationFactory.isNone()) {
-				return None
-			}
-			return implementationFactory.getOrThrow()
+			return None
 		}
+
+		if (let Some(factory) <- implementationFactory) {
+			return factory
+		}
+		return None
 	}
 
 	public func getImplementationType(): ?TypeInfo {
 		if (isKeyedService) {
 			return keyedImplementationType
-		} else {
-			return implementationType
 		}
+		return implementationType
 	}
 
 	public func tryGetImplementationType(): (Bool, ?TypeInfo) {
 		let typ = getImplementationType()
-		return (typ.isSome(), typ)
+		let flag = typ.isSome()
+		return (flag, typ)
 	}
 }
