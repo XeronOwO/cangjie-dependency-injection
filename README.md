@@ -12,6 +12,8 @@ Dependency injection module for Cangjie programming language, inspired by  [Micr
 
 ## Sample
 
+Note: Because Cangjie language lacks the features of interface extension for the time being, you can only call some extension functions through the original calling method, which is more troublesome. When Cangjie language is rich in features, it will be simpler.  
+
 ```cangjie
 package app
 
