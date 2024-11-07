@@ -6,6 +6,123 @@ import dependency_injection.corelib.*
 import std.reflect.*
 import std.unittest.*
 
+/******************************
+*                             *
+*        Testing Types        *
+*                             *
+******************************/
+
+@When[test]
+class FakeService <: IFakeEveryService & Resource {
+	private var _value: ?PocoClass = None
+
+	public override prop value: ?PocoClass {
+		get() { _value }
+	}
+
+	public mut prop valueExt: ?PocoClass {
+		get() { _value }
+		set(value) { _value = value }
+	}
+
+	private var _isClosed = false
+
+	public override func isClosed(): Bool {
+		return _isClosed
+	}
+
+	public override func close() {
+		if (_isClosed) {
+			throw ResourceClosedException("FakeService")
+		}
+
+		_isClosed = true
+	}
+}
+
+@When[test]
+interface IFakeEveryService
+	<: IFakeService
+	 & IFakeMultipleService
+	 & IFakeScopedService
+	 & IFakeServiceInstance
+	 & IFakeSingletonService
+	 & IFakeOpenGenericService<PocoClass> {
+}
+
+@When[test]
+interface IFakeMultipleService <: IFakeService {
+}
+
+@When[test]
+interface IFakeOpenGenericService<T> {
+	prop value: ?T
+}
+
+@When[test]
+interface IFakeScopedService <: IFakeService {
+}
+
+@When[test]
+interface IFakeService {
+}
+
+@When[test]
+interface IFakeServiceInstance <: IFakeService {
+}
+
+@When[test]
+interface IFakeSingletonService <: IFakeService {
+}
+
+@When[test]
+class PocoClass {
+}
+
+/**********************
+*                     *
+*        Tests        *
+*                     *
+**********************/
+
+@Test
+class ServiceCollectionTests {
+	@TestCase
+	func testMakeReadOnly() {
+		let serviceCollection = ServiceCollection()
+		let descriptor = ServiceDescriptor(TypeInfo.of<IFakeService>(), FakeService())
+		serviceCollection.add(descriptor)
+
+		serviceCollection.makeReadOnly()
+
+		let descriptor2 = ServiceDescriptor(TypeInfo.of<IFakeEveryService>(), FakeService())
+
+		@ExpectThrows[InvalidOperationException](serviceCollection[0] = descriptor2)
+		@ExpectThrows[InvalidOperationException](serviceCollection.clear())
+		@ExpectThrows[InvalidOperationException](serviceCollection.remove({ d => refEq(d, descriptor) }))
+		@ExpectThrows[InvalidOperationException](serviceCollection.add(descriptor2))
+		@ExpectThrows[InvalidOperationException](serviceCollection.insert(0, descriptor2))
+		@ExpectThrows[InvalidOperationException](serviceCollection.removeAt(0))
+
+		@Expect(serviceCollection.isReadOnly)
+		@Expect(serviceCollection.count == 1)
+		for (d in serviceCollection) {
+			@Expect(refEq(d, descriptor))
+		}
+		@Expect(refEq(descriptor, serviceCollection[0]))
+		@Expect(serviceCollection.contains({ d => refEq(d, descriptor) }))
+		@Expect(serviceCollection.indexOf({ d => refEq(d, descriptor) }) == 0)
+
+		let copyArray = Array<?ServiceDescriptor>(1, repeat: Option<ServiceDescriptor>.None)
+		serviceCollection.copyTo(copyArray, 0)
+		@Expect(refEq(descriptor, copyArray[0].getOrThrow()))
+
+		// ensure MakeReadOnly can be called twice, and it is just ignored
+		serviceCollection.makeReadOnly()
+		@Expect(serviceCollection.isReadOnly)
+	}
+}
+
 @When[test]
 private interface Interface1 <: ToString {}
 
@@ -45,7 +162,7 @@ private class Class3 <: Interface3 {
 }
 
 @Test
-private class ServiceProviderTest {
+class ServiceProviderTest {
 	/*
 	Test case naming policy:
 

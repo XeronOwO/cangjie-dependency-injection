@@ -2,7 +2,7 @@
 
 [package]
   cjc-version = "0.55.3"
-  compile-option = "-Woff unused --diagnostic-format=noColor"
+  compile-option = "-Woff unused"
   description = "Dependency injection implementation of Cangjie. Inspired by Microsoft.Extensions.DependencyInjection."
   link-option = ""
   name = "dependency_injection"
@@ -11,4 +11,3 @@
   src-dir = ""
   target-dir = ""
   version = "1.0.0"
-  [package.package-configuration]
