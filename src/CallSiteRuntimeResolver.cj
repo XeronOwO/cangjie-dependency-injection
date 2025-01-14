@@ -112,7 +112,7 @@ internal class CallSiteRuntimeResolver <: CallSiteVisitor<RuntimeResolverContext
 			context2.acquiredLocks = context.acquiredLocks | lockType
 			let resolved = visitCallSiteMain(callSite, context2)
 			serviceProviderEngine.captureResource(resolved)
-			resolvedServices.put(callSite.cache.key, resolved)
+			resolvedServices.add(callSite.cache.key, resolved)
 			return resolved
 		} finally {
 			if (lockTaken) {

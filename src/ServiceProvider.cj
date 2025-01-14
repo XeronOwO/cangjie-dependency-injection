@@ -62,7 +62,7 @@ public class ServiceProvider <: IServiceProvider & IKeyedServiceProvider & Resou
 					if (exceptions.isNone()) {
 						exceptions = ArrayList()
 					}
-					exceptions.getOrThrow().append(e)
+					exceptions.getOrThrow().add(e)
 				}
 			}
 

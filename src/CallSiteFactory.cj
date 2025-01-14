@@ -210,7 +210,7 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 						if (bestConstructorParameterTypes.isNone()) {
 							bestConstructorParameterTypes = HashSet()
 							for (p in bestConstructor.getOrThrow().parameters) {
-								bestConstructorParameterTypes.getOrThrow().put(p.typeInfo)
+								bestConstructorParameterTypes.getOrThrow().add(p.typeInfo)
 							}
 						}
 
@@ -292,7 +292,7 @@ internal class CallSiteFactory <: IServiceProviderIsService & IServiceProviderIs
 				return None
 			}
 
-			parameterCallSites.append(callSite.getOrThrow())
+			parameterCallSites.add(callSite.getOrThrow())
 		}
 
 		return parameterCallSites.toArray()
@@ -418,7 +418,7 @@ private struct ServiceDescriptorCacheItem {
 		} else {
 			newCacheItem._item = _item.getOrThrow()
 			newCacheItem._items = _items ?? ArrayList<ServiceDescriptor>()
-			newCacheItem._items.getOrThrow().append(descriptor)
+			newCacheItem._items.getOrThrow().add(descriptor)
 		}
 		return newCacheItem
 	}

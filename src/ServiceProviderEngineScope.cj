@@ -103,7 +103,7 @@ internal class ServiceProviderEngineScope <: IServiceScope & IServiceProvider & 
 				_resources = ArrayList<Any>()
 			}
 
-			_resources.getOrThrow().append(service.getOrThrow())
+			_resources.getOrThrow().add(service.getOrThrow())
 		}
 		sync.unlock()
 
